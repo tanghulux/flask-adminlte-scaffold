@@ -3,8 +3,8 @@ import math
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user
 from app import utils
-from app.models import CfgNotify
-from app.main.forms import CfgNotifyForm
+from app.models import CfgNotify, CltInfo
+from app.main.forms import CfgNotifyForm, CltInfoForm
 from . import main
 
 logger = get_logger(__name__)
@@ -51,7 +51,7 @@ def common_edit(DynamicModel, form, view):
             if form.validate_on_submit():
                 utils.form_to_model(form, model)
                 model.save()
-                flash('修改成功')
+                #flash('修改成功')
             else:
                 utils.flash_errors(form)
     else:
@@ -60,7 +60,7 @@ def common_edit(DynamicModel, form, view):
             model = DynamicModel()
             utils.form_to_model(form, model)
             model.save()
-            flash('保存成功')
+            #flash('保存成功')
         else:
             utils.flash_errors(form)
     return render_template(view, form=form, current_user=current_user)
@@ -86,9 +86,21 @@ def index():
 def notifylist():
     return common_list(CfgNotify, 'notifylist.html')
 
+# 搜集客户信息查询
+@main.route('/cltinfo', methods=['GET', 'POST'])
+@login_required
+def cltinfo():
+    return common_list(CltInfo, 'tasks/cltinfo.html')
+
 
 # 通知方式配置
 @main.route('/notifyedit', methods=['GET', 'POST'])
 @login_required
 def notifyedit():
     return common_edit(CfgNotify, CfgNotifyForm(), 'notifyedit.html')
+
+# 通知方式配置
+@main.route('/cltinfoedit', methods=['GET', 'POST'])
+@login_required
+def cltinfoedit():
+    return common_edit(CltInfo, CltInfoForm(), 'tasks/cltinfoedit.html')

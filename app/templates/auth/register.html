@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>系统登录</title>
+    <title>系统注册</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='plugins/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='plugins/iCheck/square/blue.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='plugins/pace/pace.min.css') }}">
@@ -19,11 +19,11 @@
 <body class="hold-transition login-page">
 <div class="login-box">
     <div class="login-logo">
-        <b>系统登录</b>
+        <b>系统注册</b>
     </div>
     <div class="login-box-body">
-        <p class="login-box-msg">请输入管理员帐户及密码</p>
-        <form method="post">
+        <p class="login-box-msg">请输入用户信息</p>
+        <form method="post" class="form">
             {{form.hidden_tag()}}
             <div class="form-group has-feedback">
                 {{form.username(class_="form-control",placeholder="用户名")}}
@@ -32,6 +32,16 @@
             <div class="form-group has-feedback">
                 {{form.password(class_="form-control",placeholder="密码")}}
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+            </div>
+            <div class="form-group has-feedback">
+                {{form.fullname(class_="form-control",placeholder="真名")}}
+                <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+            </div>
+            <div class="form-group has-feedback">
+                {{form.email(class_="form-control",placeholder="邮箱")}}
+            </div>
+            <div class="form-group has-feedback">
+                {{form.phone(class_="form-control",placeholder="电话")}}
             </div>
 
             {% for message in get_flashed_messages() %}
@@ -42,8 +52,9 @@
             {% endfor %}
 
             <div class="row">
+
                 <div class="col-xs-8">
-                    <a href="{{ url_for('auth.register') }}">还没有账户？</a>
+                    <a href="{{ url_for('auth.login') }}">已有账号，返回登录</a>
                 </div>
 
                 <div class="col-xs-4">
@@ -52,6 +63,8 @@
 
 
             </div>
+
+
 
         </form>
     </div>

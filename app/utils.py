@@ -52,8 +52,6 @@ def dict_to_obj(dict, obj, exclude=None):
 
 # peewee转dict
 def obj_to_dict(obj, exclude=None):
-    print('-----------------')
-    print(dir(obj))
     dict = obj.__dict__['__data__']
     if exclude:
         for key in exclude:

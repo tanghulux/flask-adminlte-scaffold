@@ -2,7 +2,7 @@
 
 from peewee import MySQLDatabase, Model, CharField, BooleanField, IntegerField
 import json
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import UserMixin
 from app import login_manager
 from conf.config import config
@@ -30,15 +30,19 @@ class BaseModel(Model):
 
 # 管理员工号
 class User(UserMixin, BaseModel):
-    username = CharField()  # 用户名
+    username = CharField(unique=True)  # 用户名
     password = CharField()  # 密码
     fullname = CharField()  # 真实性名
     email = CharField()  # 邮箱
     phone = CharField()  # 电话
-    status = BooleanField(default=True)  # 生效失效标识
+    status = BooleanField(default=False)  # 生效失效标识
 
     def verify_password(self, raw_password):
-        return check_password_hash(self.password, raw_password)
+        # return check_password_hash(self.password, raw_password) # 未加密安全处理
+
+        if raw_password == self.password:
+            return True
+        return False
 
 
 # 通知人配置
@@ -49,6 +53,20 @@ class CfgNotify(BaseModel):
     notify_number = CharField()  # 通知号码
     status = BooleanField(default=True)  # 生效失效标识
 
+# 销售搜集客户有效信息的任务
+class CltInfo(BaseModel):
+    charge = CharField()  # 负责人
+    source = CharField()  # 信息来源
+    type1 = CharField()  # 行业分类
+    type2 = CharField()  # 具体分类
+    info = CharField()  # 其他信息
+    product = CharField()  # 对应销售的产品
+    method = CharField()  # 跟进方式
+    progress = CharField()  # 跟进进度
+    who = CharField()  # 对方客户联系人
+    tel = CharField()  # 联系电话
+    remark = CharField()  # 备注
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -58,7 +76,7 @@ def load_user(user_id):
 # 建表
 def create_table():
     db.connect()
-    db.create_tables([CfgNotify, User])
+    db.create_tables([CltInfo, CfgNotify, User])
 
 
 if __name__ == '__main__':
